@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset='utf-8' /><style></style>
+        <meta charset='utf-8' />
         <link href='css/core/main.min.css' rel='stylesheet' /> <!-- Verificar posteriormente, provavelmente é o núcleo dos algoritmos do fullcalendar.io -->
         <link href='css/daygrid/main.min.css' rel='stylesheet' /> <!-- Script que gera o calendário -->
         <script src='js/core/main.min.js'></script>
@@ -68,7 +68,6 @@
                                 <label class="col-sm-2 col-form-label">Título</label>
                                 <div class="col-sm-10">
                                     <input type="text" name="title" class="form-control" id="title" placeholder="Título do evento">
-                                    <label v-else class="p-login-error" for="input-title label-required">{{messageTitulo}}</label>
                                 </div>
                             </div>
 
@@ -76,34 +75,40 @@
 			                       <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Subtítulo</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="subtitulo" class="form-control" id="subtitulo" placeholder="subtítulo">
-                                    <label v-else class="p-login-error" for="input-subtitulo label-required">{{messageSubtitulo}}</label>
+                                    <input type="text" name="subtitulo" class="form-control" id="descricao" placeholder="Descrição">
                                 </div>
                             </div>
 
 			                       <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Vagas</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="vagas" class="form-control" id="vagas" placeholder="Descrição">
-                                    <label v-else class="p-login-error" for="input-vagas label-required">{{messageVagas}}</label>
+                                    <input type="text" name="subtitulo" class="form-control" id="descricao" placeholder="Descrição">
                                 </div>
                             </div>
 
 			                       <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Preço</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="preco" class="form-control" id="preco" placeholder="R$ 0,00">
-                                    <label v-else class="p-login-error" for="input-preco label-required">{{messagePreco}}</label>
+                                    <input type="text" name="subtitulo" class="form-control" id="descricao" placeholder="R$ 0,00">
                                 </div>
                             </div>
 
 			                       <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Endereço</label>
                                 <div class="col-sm-10">
-                                    <input type="text" name="endereco" class="form-control" id="endereco" placeholder="Endereço">
-                                    <label v-else class="p-login-error" for="input-endereco label-required">{{messageEndereco}}</label>
+                                    <input type="text" name="subtitulo" class="form-control" id="endereço" placeholder="Endereço">
                                 </div>
                             </div>
+
+                            <!--
+
+                            imput[type=text] #endereço {
+
+                            }
+
+                            -->
+
+
 
                             <div class="form-group row">
                                 <label class="col-sm-2 col-form-label">Color</label>
@@ -156,166 +161,3 @@
         </div>
     </body>
 </html>
-
-<script>
-
-        import axios from "../axios/authAxios";
-        
-        export default {
-          data() {
-            return {
-              errors: {titulo: "",subtitulo: "",vagas: "",preco:"",endereço: ""},
-              subtitulo: "",
-              vagas: "",
-              preco: "",
-              endereco: "",
-            };
-          },
-          computed: {
-            messageTitulo (){
-              return this.errors.message.titulo;
-            },
-            messageSubsitulo(){
-              return this.errors.message.subtitulo;
-            },
-            messageVagas(){
-              return this.errors.message.vagas;
-            },
-            messagePreco(){
-              return this.errors.message.preco;
-            },
-            messageEndereco(){
-              return this.errors.message.endereco;
-            }
-          },
-          methods: {
-            checkForm: async function(e) {
-              e.preventDefault();
-        
-              //Checar os inputs antes de mandar para o backend
-              let isEmpty = this.verifyEmpty("titulo");
-              isEmpty += this.verifyEmpty("subtitulo");
-              isEmpty += this.verifyEmpty("vagas");
-              isEmpty += this.verifyEmpty("preco");
-              isEmpty += this.verifyEmpty("endereco");
-
-              if(isEmpty) return;
-        
-              const authData = {
-                titulo: this.titulo,
-                subtitulo: this.subtitulo,
-                vagas: this.vagas,
-                preco: this.preco,
-                endereco: this.endereco
-              };
-        
-              let res;
-        
-              try{
-                res = await axios.post("sign-in", authData);
-              }
-              catch(err){
-                // console.log(err);
-              };
-        
-              const userData = res.data;
-        
-              if(!this.checkErrorsInResponse(userData)) return;
-        
-              this.$store.dispatch('login', userData);
-        
-        
-            },
-        
-            verifyEmpty(name) {
-              if (this[name] === "") {
-                this.errors[name] = "login-error-input";
-                
-                let fieldName;
-                
-                this.errors.message[name] = `${fieldName} - Campo em branco!`;
-                return true;
-              } else if (this[name] !== "") {
-                this.errors[name] = "";
-              }
-        
-              return false;
-            },
-         },
-        };
-        </script>
-
-
-<style>
-body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-
-}
-
-#calendar {
-    max-width: 700px;
-    margin: 0 auto;
-}
-
-
-body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-}
-
-
-
-/* Text area */
-
-textarea {
-  width: 100%;
-  height: 155px;
-  padding: 12px 20px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: #f8f8f8;
-  font-size: 16px;
-  resize: none;
-}
-
-@media only screen and (max-width: 1000px) {
-  #calendar {
-    max-width: 500px;
-  }
-  .fc-scroller, .fc-day-grid-container {
-    height: auto !important;
-  }
-}
-
-@media only screen and (max-width: 780px) {
-  #calendar {
-  }
-  .fc-scroller, .fc-day-grid-container {
-    height: auto !important;
-  }
-}
-
-@media only screen and (max-width: 480px){
-  #calendar {
-    margin: 10px 10px 10px 10px;
-  }
-  .fc-scroller, .fc-day-grid-container {
-    height: auto !important;
-  
- }
-
-  .fc-toolbar {
-    font-size: 11px;
-  }
-  tr, td {
-    text-align: center !important;
-    align-items: center !important;
-  }
-}
-</style>
